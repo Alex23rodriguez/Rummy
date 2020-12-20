@@ -1,0 +1,28 @@
+{
+  "name": "rummy",
+  "version": "1.0.0",
+  "description": "Online Rummy using node.js and express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alex23rodriguez/Rummy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alex23rodriguez/Rummy/issues"
+  },
+  "homepage": "https://github.com/Alex23rodriguez/Rummy#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^3.0.4"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "nodemon": "^2.0.6"
+  }
+}
