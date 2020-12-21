@@ -61,8 +61,9 @@ const getPlayersInfo = (room_id) => {
 
 function playerTakesCard(id) {
   const player = players[id];
-  player.cards.push(rooms[player.room_id].deck.takeCard());
-  return player.cards;
+  const newCard = rooms[player.room_id].deck.takeCard();
+  player.cards.push(newCard);
+  return newCard;
 }
 
 function nextTurn(room_id) {

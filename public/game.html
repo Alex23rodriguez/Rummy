@@ -14,7 +14,7 @@
       <div class="mid-zone">
         <div id="board"></div>
       </div>
-      <div class="bot-zone">
+      <div class="bot-zone" id="bot-zone">
         <button id="take-btn">Take Card</button>
         <button id="next-turn" disabled>Finish turn</button>
         <div id="card-zone"></div>
@@ -35,7 +35,13 @@
 
     <script id="card-template" type="text/html">
       {{#cards}}
-      <div class="card" style="color:{{color}}">{{num}}</div>
+      <div
+        class="card"
+        style="color:{{color}}; {{#selected}}border-style:dashed{{/selected}}"
+        onclick="changeSelectedCard({{index}})"
+      >
+        {{num}}
+      </div>
       {{/cards}}
     </script>
 
