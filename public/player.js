@@ -4,6 +4,7 @@ var myCards = [];
 
 const $topZone = document.getElementById("top-zone");
 const $cardZone = document.getElementById("card-zone");
+const $nextTurn = document.getElementById("next-turn");
 
 const otherPlayerTemplate = document.getElementById("other-player-template")
   .innerHTML;
@@ -17,11 +18,15 @@ function updateCards(cards) {
   $cardZone.innerHTML = html;
 }
 
-document.getElementById("takeBtn").addEventListener("click", () => {
-  socket.emit("takeCard", { id: socket.id, room }, updateCards);
+document.getElementById("take-btn").addEventListener("click", () => {
+  socket.emit("takeCard", { id: socket.id, room_id }, updateCards);
 });
 
-const { username, room } = Qs.parse(location.search, {
+$nextTurn.addEventListener("click", () => {
+  socket.emit("nextTurn", room_id);
+});
+
+const { username, room: room_id } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
@@ -30,10 +35,17 @@ socket.on("updatePlayerInfo", (players) => {
 
   const index = players.findIndex((p) => p.username === username);
 
+  // enable / disable nextTurn button
+  if (players[index].turn) {
+    $nextTurn.removeAttribute("disabled");
+  } else {
+    $nextTurn.setAttribute("disabled", "disabled");
+  }
+
   players = players.slice(index + 1).concat(players.slice(0, index));
 
   const html = Mustache.render(otherPlayerTemplate, { players });
   $topZone.innerHTML = html;
 });
 
-socket.emit("join", { username, room });
+socket.emit("join", { username, room_id });

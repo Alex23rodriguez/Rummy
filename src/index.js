@@ -9,6 +9,7 @@ const {
   removePlayer,
   getPlayersInfo,
   playerTakesCard,
+  nextTurn,
 } = require("./utils/players");
 
 const app = express();
@@ -20,21 +21,24 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "../public")));
 
 io.on("connection", (socket) => {
-  console.log("new connection");
+  socket.on("join", ({ username, room_id }) => {
+    addPlayer(socket.id, username, room_id);
+    console.log(`${username} joined room ${room_id}`);
 
-  socket.on("join", ({ username, room }) => {
-    addPlayer(socket.id, username, room);
-    console.log(getPlayersInfo(room));
+    socket.join(room_id);
 
-    socket.join(room);
-
-    io.to(room).emit("updatePlayerInfo", getPlayersInfo(room));
+    io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
 
-  socket.on("takeCard", ({ id, room }, callback) => {
+  socket.on("takeCard", ({ id, room_id }, callback) => {
     const cards = playerTakesCard(id);
-    io.to(room).emit("updatePlayerInfo", getPlayersInfo(room));
+    io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
     callback(cards);
+  });
+
+  socket.on("nextTurn", (room_id) => {
+    nextTurn(room_id);
+    io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
 
   socket.on("disconnect", () => {

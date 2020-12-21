@@ -65,4 +65,17 @@ function playerTakesCard(id) {
   return player.cards;
 }
 
-module.exports = { addPlayer, removePlayer, getPlayersInfo, playerTakesCard };
+function nextTurn(room_id) {
+  room = rooms[room_id];
+  room.turn += 1;
+  room.turn %= room.players.length;
+  return room;
+}
+
+module.exports = {
+  addPlayer,
+  removePlayer,
+  getPlayersInfo,
+  playerTakesCard,
+  nextTurn,
+};
