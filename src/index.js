@@ -7,7 +7,7 @@ const socketio = require("socket.io");
 const {
   addPlayer,
   removePlayer,
-  getPlayersInRoom,
+  getPlayersInfo,
   playerTakesCard,
 } = require("./utils/players");
 
@@ -24,20 +24,27 @@ io.on("connection", (socket) => {
 
   socket.on("join", ({ username, room }) => {
     addPlayer(socket.id, username, room);
-    console.log(getPlayersInRoom(room));
+    console.log(getPlayersInfo(room));
 
     socket.join(room);
 
-    io.to(room).emit("playerCountChange", getPlayersInRoom(room));
+    io.to(room).emit("updatePlayerInfo", getPlayersInfo(room));
   });
 
-  socket.on("takeCard", ({ username, room }, callback) => {
-    const cards = playerTakesCard(username, room);
+  socket.on("takeCard", ({ id, room }, callback) => {
+    const cards = playerTakesCard(id);
+    io.to(room).emit("updatePlayerInfo", getPlayersInfo(room));
     callback(cards);
   });
 
   socket.on("disconnect", () => {
-    removePlayer(socket.id);
+    room_id = removePlayer(socket.id);
+    if (!room_id) {
+      console.error("non registered player disconnected");
+      return;
+    }
+    console.log("player left");
+    io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
 });
 

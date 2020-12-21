@@ -1,36 +1,68 @@
 const Deck = require("./deck");
 
-const players = [];
-const decks = {};
+const players = {};
+const rooms = {};
 
-const addPlayer = (id, username, room) => {
-  players.push({ id, username, room, cards: [] });
-  if (!decks[room]) {
-    decks[room] = new Deck();
+const addPlayer = (id, username, room_id) => {
+  players[id] = { username, cards: [], room_id };
+  if (!rooms[room_id]) {
+    rooms[room_id] = {
+      deck: new Deck(),
+      players: [id],
+      turn: 0,
+      board: {},
+    };
+  } else {
+    rooms[room_id].players.push(id);
   }
 };
 
 const removePlayer = (id) => {
-  const index = players.findIndex((p) => p.id === id);
-
-  if (index !== -1) {
-    return players.splice(index, 1)[0];
+  const p = players[id];
+  if (!p) {
+    return;
   }
+  const room = rooms[p.room_id];
+  const playersList = room.players;
+  // remove from dict of players
+  delete players[id];
+  // remove from room players
+  const index = playersList.indexOf(id);
+  playersList.splice(index, 1);
+  // check if turn needs adjustment
+  if (index < room.turn) {
+    room.turn--;
+  }
+  // return cards to deck
+  room.deck.addCards(p.cards);
+  room.deck.reshuffle();
+
+  // check if room is empty
+  if (room.players.length === 0) {
+    console.log(`room ${p.room_id} empty. removing room`);
+    delete rooms[id];
+  }
+  return p.room_id;
 };
 
-const getPlayersInRoom = (room) => {
-  const ps = players.filter((p) => p.room === room);
-  return Array.from(ps, (p) => {
-    return { username: p.username, numCards: p.cards.length };
-  });
+const getPlayersInfo = (room_id) => {
+  room = rooms[room_id];
+  let ans = [];
+  for (i in room.players) {
+    p = players[room.players[i]];
+    ans.push({
+      username: p.username,
+      numCards: p.cards.length,
+      turn: i === room.turn,
+    });
+  }
+  return ans;
 };
 
-function playerTakesCard(username, room) {
-  const player = players.find(
-    (p) => p.username === username && p.room === room
-  );
-  player.cards.push(decks[room].takeCard());
+function playerTakesCard(id) {
+  const player = players[id];
+  player.cards.push(rooms[player.room_id].deck.takeCard());
   return player.cards;
 }
 
-module.exports = { addPlayer, removePlayer, getPlayersInRoom, playerTakesCard };
+module.exports = { addPlayer, removePlayer, getPlayersInfo, playerTakesCard };

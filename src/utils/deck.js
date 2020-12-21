@@ -22,6 +22,12 @@ function Deck(q = 1) {
   _shuffleArray(this.deck);
 
   this.takeCard = () => this.deck.pop();
+  this.addCards = function (cards) {
+    this.deck = this.deck.concat(cards);
+  };
+  this.reshuffle = function () {
+    _shuffleArray(this.deck);
+  };
 }
 
 module.exports = Deck;

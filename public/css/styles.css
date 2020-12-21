@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.top-zone {
+  /* flex-grow: 1; */
+  height: 15vh;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.mid-zone {
+  /* flex-grow: 5; */
+  height: 70vh;
+}
+
+.bot-zone {
+  /* flex-grow: 1; */
+  height: 15vh;
+  background-color: aliceblue;
+}
+
+.other-player-info {
+  align-self: center;
+  padding: 5px;
+  margin: 5px;
+  border-style: solid;
+  flex-grow: 1;
+  width: 100px;
+  height: 90%;
+  text-align: center;
+}

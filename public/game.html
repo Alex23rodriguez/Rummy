@@ -5,11 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rummy</title>
     <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
-    <h1>Rummy</h1>
-    <button id="takeBtn">Take Card</button>
+    <!-- <h1>Rummy</h1> -->
+    <div class="main">
+      <div class="top-zone" id="top-zone"></div>
+      <div class="mid-zone">
+        <div id="board"></div>
+      </div>
+      <div class="bot-zone">
+        <button id="takeBtn">Take Card</button>
+      </div>
+    </div>
 
+    <script id="other-player-template" type="text/html">
+      {{#players}}
+      <div class="other-player-info">
+        <h3 style="margin:10px">{{username}}</h3>
+        <p>Cards left: {{numCards}}</p>
+      </div>
+      {{/players}}
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/player.js"></script>
