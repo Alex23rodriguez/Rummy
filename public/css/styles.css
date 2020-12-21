@@ -34,3 +34,17 @@
   height: 90%;
   text-align: center;
 }
+
+#card-zone {
+  display: flex;
+}
+
+.card {
+  margin: 5px;
+  padding: 5px;
+  border-style: solid;
+  height: 10vh;
+  width: 6vh;
+  min-width: 4vh;
+  text-align: center;
+}

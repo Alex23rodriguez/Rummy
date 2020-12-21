@@ -53,7 +53,7 @@ const getPlayersInfo = (room_id) => {
     ans.push({
       username: p.username,
       numCards: p.cards.length,
-      turn: i === room.turn,
+      turn: parseInt(i) === room.turn,
     });
   }
   return ans;

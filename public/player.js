@@ -2,14 +2,19 @@ const socket = io();
 
 var myCards = [];
 
-const $otherPlayers = document.getElementById("top-zone");
+const $topZone = document.getElementById("top-zone");
+const $cardZone = document.getElementById("card-zone");
 
 const otherPlayerTemplate = document.getElementById("other-player-template")
   .innerHTML;
+const cardTemplate = document.getElementById("card-template").innerHTML;
 
 function updateCards(cards) {
-  console.log("received card");
+  console.log("Cards changed");
   myCards = cards;
+
+  const html = Mustache.render(cardTemplate, { cards });
+  $cardZone.innerHTML = html;
 }
 
 document.getElementById("takeBtn").addEventListener("click", () => {
@@ -21,14 +26,14 @@ const { username, room } = Qs.parse(location.search, {
 });
 
 socket.on("updatePlayerInfo", (players) => {
-  //   console.log(players);
+  console.log(players);
 
   const index = players.findIndex((p) => p.username === username);
 
   players = players.slice(index + 1).concat(players.slice(0, index));
 
   const html = Mustache.render(otherPlayerTemplate, { players });
-  $otherPlayers.innerHTML = html;
+  $topZone.innerHTML = html;
 });
 
 socket.emit("join", { username, room });
