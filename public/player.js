@@ -6,7 +6,7 @@ const { username, room: room_id } = Qs.parse(location.search, {
 
 const myCards = [];
 var selectedCard;
-var boardSelected = false;
+var isMyTurn = false;
 
 const $topZone = document.getElementById("top-zone");
 const $board = document.getElementById("board");
@@ -21,11 +21,12 @@ const placedCardTemplate = document.getElementById("placed-card-template")
   .innerHTML;
 
 $botZone.addEventListener("click", (e) => {
+  deselectBoard();
   if (
     selectedCard !== undefined &&
     ["bot-zone", "card-zone"].includes(e.target.id)
   ) {
-    deselectHand(e);
+    deselectHand();
   }
 });
 
@@ -64,7 +65,7 @@ function changeSelectedCard(index) {
   renderHand();
 }
 
-function deselectHand(e) {
+function deselectHand() {
   if (selectedCard === undefined) return;
   if (selectedCard < myCards.length) myCards[selectedCard].selected = false;
   selectedCard = undefined;
@@ -87,8 +88,10 @@ socket.on("updatePlayerInfo", (players) => {
 
   // enable / disable nextTurn button
   if (players[index].turn) {
+    isMyTurn = true;
     $nextTurn.removeAttribute("disabled");
   } else {
+    isMyTurn = false;
     $nextTurn.setAttribute("disabled", "disabled");
   }
 

@@ -1,7 +1,10 @@
 const board = [];
 var selectedInBoard = [];
 
-for (var i = 0; i < 200; i++) {
+const HEIGHT = 8;
+const WIDTH = 25;
+
+for (var i = 0; i < HEIGHT * WIDTH; i++) {
   board.push({ index: i });
 }
 
@@ -15,6 +18,7 @@ function deselectBoard() {
 }
 
 function boardClick(index) {
+  if (!isMyTurn) return;
   if (board[index].is_card) {
     if (isShiftDown) {
       returnCardToHand(index);
@@ -23,6 +27,9 @@ function boardClick(index) {
       if (board[index].selected) {
         deselectHand();
         selectedInBoard.push(index);
+        selectedInBoard = selectedInBoard.sort((i, j) => i > j);
+      } else {
+        selectedInBoard = selectedInBoard.filter((ind) => ind !== index);
       }
     }
   } else if (selectedCard !== undefined) {
@@ -89,4 +96,46 @@ function setBoard(minBoard) {
       board[i] = { index: i };
     }
   }
+}
+
+function moveBoard(dir) {
+  if (!selectedInBoard.length) return;
+  // check borders
+  var add;
+
+  switch (dir) {
+    case "Up":
+      if (selectedInBoard.some((index) => Math.floor(index / WIDTH) === 0))
+        return;
+      add = -WIDTH;
+      break;
+    case "Down":
+      if (
+        selectedInBoard.some(
+          (index) => Math.floor(index / WIDTH) === HEIGHT - 1
+        )
+      )
+        return;
+      add = WIDTH;
+      break;
+    case "Left":
+      if (selectedInBoard.some((index) => index % WIDTH === 0)) return;
+      add = -1;
+      break;
+    case "Right":
+      if (selectedInBoard.some((index) => index % WIDTH === WIDTH - 1)) return;
+      add = 1;
+      break;
+  }
+  const indexes = [...selectedInBoard];
+  if (["Down", "Right"].includes(dir)) {
+    indexes.reverse();
+  }
+  indexes.forEach((index) => {
+    swap(board, index, index + add, false);
+  });
+  selectedInBoard = selectedInBoard.map((i) => i + add);
+  renderBoard();
+
+  socket.emit("updateBoard", { minBoard: getMinBoard(), room_id });
 }

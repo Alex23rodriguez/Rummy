@@ -3,9 +3,7 @@ var isShiftDown = false;
 window.addEventListener("keydown", (e) => {
   if (e.key.includes("Arrow")) {
     const key = e.key.replace("Arrow", "");
-    if (boardSelected) {
-      // handle moving board
-    } else if (selectedCard !== undefined) {
+    if (selectedCard !== undefined) {
       // handle organizing cards
       if (key == "Left" && selectedCard > 0) {
         swap(myCards, selectedCard, selectedCard - 1);
@@ -16,6 +14,9 @@ window.addEventListener("keydown", (e) => {
         selectedCard++;
         renderHand();
       }
+    } else {
+      // handle moving board
+      moveBoard(key);
     }
   } else if (e.key == "Shift") {
     isShiftDown = true;
