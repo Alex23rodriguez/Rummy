@@ -1,0 +1,77 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.top-zone {
+  /* flex-grow: 1; */
+  height: 15vh;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.mid-zone {
+  /* flex-grow: 5; */
+  height: 65vh;
+}
+
+.bot-zone {
+  /* flex-grow: 1; */
+  height: 20vh;
+  background-color: aliceblue;
+}
+
+.other-player-info {
+  align-self: center;
+  padding: 5px;
+  margin: 5px;
+  border-style: solid;
+  flex-grow: 1;
+  width: 100px;
+  height: 90%;
+  text-align: center;
+}
+
+#card-zone {
+  display: flex;
+  height: 60%;
+}
+
+#actions-zone {
+  /* display: flex; */
+  /* justify-content: space-evenly; */
+  height: 25%;
+}
+
+.card {
+  margin: 5px;
+  padding: 5px;
+  border-style: solid;
+  /* height: 16; */
+  width: 6vh;
+  min-width: 4vh;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  height: 100%;
+  grid-gap: 1px 1px;
+}
+
+.placed-card {
+  /* height: 100%; */
+  border-style: solid;
+  border-color: lightgray;
+  border-width: 1px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}

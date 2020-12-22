@@ -6,6 +6,7 @@
     <title>Rummy</title>
     <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/game.css" />
   </head>
   <body>
     <!-- <h1>Rummy</h1> -->
@@ -15,8 +16,11 @@
         <div class="board" id="board"></div>
       </div>
       <div class="bot-zone" id="bot-zone">
-        <button id="take-btn">Take Card</button>
-        <button id="next-turn" disabled>Finish turn</button>
+        <div id="actions-zone">
+          <button id="take-btn">Take Card</button>
+          <button id="next-turn" disabled>Finish turn</button>
+        </div>
+
         <div id="card-zone"></div>
       </div>
     </div>
@@ -25,7 +29,7 @@
       {{#players}}
       <div
         class="other-player-info"
-        style="{{#turn}}border-style:dotted{{/turn}}"
+        style="color: lightslategrey; {{#turn}}border-style:dashed; color:#6b47b8;{{/turn}}"
       >
         <h3 style="margin:10px">{{username}}</h3>
         <p>Cards left: {{numCards}}</p>

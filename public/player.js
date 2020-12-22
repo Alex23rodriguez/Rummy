@@ -26,7 +26,7 @@ $botZone.addEventListener("click", (e) => {
   deselectBoard();
   if (
     selectedCard !== undefined &&
-    ["bot-zone", "card-zone"].includes(e.target.id)
+    ["bot-zone", "card-zone", "actions-zone"].includes(e.target.id)
   ) {
     deselectHand();
   }
