@@ -38,6 +38,9 @@ const removePlayer = (id) => {
   const index = playersList.indexOf(id);
   playersList.splice(index, 1);
   // check if turn needs adjustment
+  if (index == room.turn) {
+    room.turn = index % room.players.length;
+  }
   if (index < room.turn) {
     room.turn--;
   }
