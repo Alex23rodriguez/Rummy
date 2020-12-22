@@ -38,6 +38,11 @@ function boardClick(index) {
     }
   } else if (selectedCard !== undefined) {
     placeCard(index);
+  } else if (selectedInBoard.length === 1) {
+    const first = selectedInBoard[0];
+    deselectBoard();
+    swap(board, index, first);
+    socket.emit("updateBoard", { minBoard: getMinBoard(), room_id });
   } else {
     deselectBoard();
   }
