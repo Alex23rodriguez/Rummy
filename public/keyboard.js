@@ -1,4 +1,4 @@
-var isShiftDown = false;
+var _isShiftDown = false;
 
 window.addEventListener("keydown", (e) => {
   if (e.key.includes("Arrow")) {
@@ -19,12 +19,12 @@ window.addEventListener("keydown", (e) => {
       moveBoard(key);
     }
   } else if (e.key == "Shift") {
-    isShiftDown = true;
+    _isShiftDown = true;
   }
 });
 
 window.addEventListener("keyup", (e) => {
   if (e.key == "Shift") {
-    isShiftDown = false;
+    _isShiftDown = false;
   }
 });

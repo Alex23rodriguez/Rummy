@@ -7,6 +7,7 @@ const { username, room: room_id } = Qs.parse(location.search, {
 const myCards = [];
 var selectedCard;
 var isMyTurn = false;
+var _hasMoved = false;
 
 const $topZone = document.getElementById("top-zone");
 const $board = document.getElementById("board");

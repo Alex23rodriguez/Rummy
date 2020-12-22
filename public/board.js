@@ -20,9 +20,13 @@ function deselectBoard() {
 function boardClick(index) {
   if (!isMyTurn) return;
   if (board[index].is_card) {
-    if (isShiftDown) {
+    if (_isShiftDown) {
       returnCardToHand(index);
     } else {
+      if (_hasMoved) {
+        deselectBoard();
+        _hasMoved = false;
+      }
       board[index].selected = !board[index].selected;
       if (board[index].selected) {
         deselectHand();
@@ -34,6 +38,8 @@ function boardClick(index) {
     }
   } else if (selectedCard !== undefined) {
     placeCard(index);
+  } else {
+    deselectBoard();
   }
   renderBoard();
 }
@@ -145,6 +151,9 @@ function moveBoard(dir) {
   indexes.forEach((index) => {
     swap(board, index, index + add, false);
   });
+
+  _hasMoved = true;
+
   selectedInBoard = selectedInBoard.map((i) => i + add);
   renderBoard();
 
