@@ -70,6 +70,7 @@ function returnCardToHand(index) {
     selected: false,
   });
   renderHand();
+  socket.emit("updateBoard", { minBoard: getMinBoard(), room_id });
 }
 
 function getMinBoard() {

@@ -95,7 +95,7 @@ socket.on("updatePlayerInfo", (players) => {
     $nextTurn.setAttribute("disabled", "disabled");
   }
 
-  players = players.slice(index + 1).concat(players.slice(0, index));
+  //   players = players.slice(index + 1).concat(players.slice(0, index));
 
   const html = Mustache.render(otherPlayerTemplate, { players });
   $topZone.innerHTML = html;

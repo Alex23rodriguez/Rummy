@@ -1,3 +1,6 @@
+const NUM_DECKS = 1;
+const NUM_JOKERS = 4;
+
 function Card(num, color) {
   this.num = num;
   this.color = color;
@@ -10,15 +13,17 @@ function _shuffleArray(array) {
   }
 }
 
-function Deck(q = 1) {
-  this.deck = [];
-  for (var i = 0; i < q; i++) {
-    for (var num = 1; num <= 13; num++) {
-      ["red", "blue", "green", "black"].forEach((color) => {
+function Deck() {
+  this.deck = Array(NUM_JOKERS).fill(new Card("⭐️", "black"));
+  for (var i = 0; i < NUM_DECKS; i++) {
+    ["red", "blue", "green", "black"].forEach((color) => {
+      this.deck.push(new Card("A", color));
+      for (var num = 2; num <= 13; num++) {
         this.deck.push(new Card(num, color));
-      });
-    }
+      }
+    });
   }
+
   _shuffleArray(this.deck);
 
   this.takeCard = () => this.deck.pop();

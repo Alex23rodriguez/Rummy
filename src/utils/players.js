@@ -68,6 +68,12 @@ function playerTakesCard(id) {
   return newCard;
 }
 
+function playerPlacesCard(id, card) {
+  players[id].cards = players[id].cards.filter(
+    (c) => c.num !== card.num || c.color !== card.color
+  );
+}
+
 function nextTurn(room_id) {
   room = rooms[room_id];
   room.turn += 1;
@@ -91,4 +97,5 @@ module.exports = {
   nextTurn,
   updateBoardInRoom,
   getBoardInRoom,
+  playerPlacesCard,
 };
