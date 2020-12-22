@@ -25,13 +25,18 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "../public")));
 
 io.on("connection", (socket) => {
-  socket.on("join", ({ username, room_id }) => {
-    addPlayer(socket.id, username, room_id);
-    socket.emit("updateBoard", getBoardInRoom(room_id));
-    console.log(`${username} joined room ${room_id}`);
-
+  socket.on("join", ({ username, room_id }, callback) => {
     socket.join(room_id);
 
+    // add player
+    const initialDeck = addPlayer(socket.id, username, room_id);
+    // setup board for that player
+    socket.emit("updateBoard", getBoardInRoom(room_id));
+
+    // setup initialdeck
+    callback(initialDeck);
+
+    console.log(`${username} joined room ${room_id}`);
     io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
 

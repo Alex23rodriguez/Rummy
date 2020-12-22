@@ -13,6 +13,7 @@ const $board = document.getElementById("board");
 const $botZone = document.getElementById("bot-zone");
 const $cardZone = document.getElementById("card-zone");
 const $nextTurn = document.getElementById("next-turn");
+const $takeBtn = document.getElementById("take-btn");
 
 const otherPlayerTemplate = document.getElementById("other-player-template")
   .innerHTML;
@@ -35,12 +36,19 @@ function swap(array, i, j) {
   [array[i].index, array[j].index] = [i, j];
 }
 
-function updateCards(cards) {
-  myCards = cards;
+function addManyCards(cards) {
+  cards.forEach((card, index) => {
+    card.index = index + myCards.length;
+  });
+  myCards.splice(myCards.length, 0, ...cards);
   renderHand();
 }
 
 function addCard(card) {
+  if (!card) {
+    console.log("Deck is empty!");
+    return;
+  }
   card.index = myCards.length;
   card.selected = false;
   myCards.push(card);
@@ -72,7 +80,7 @@ function deselectHand() {
   renderHand();
 }
 
-document.getElementById("take-btn").addEventListener("click", () => {
+$takeBtn.addEventListener("click", () => {
   socket.emit("takeCard", { id: socket.id, room_id }, addCard);
 });
 
@@ -90,9 +98,11 @@ socket.on("updatePlayerInfo", (players) => {
   if (players[index].turn) {
     isMyTurn = true;
     $nextTurn.removeAttribute("disabled");
+    $takeBtn.removeAttribute("disabled");
   } else {
     isMyTurn = false;
     $nextTurn.setAttribute("disabled", "disabled");
+    $takeBtn.setAttribute("disabled", "disabled");
   }
 
   //   players = players.slice(index + 1).concat(players.slice(0, index));
@@ -106,5 +116,5 @@ socket.on("updateBoard", (minBoard) => {
   renderBoard();
 });
 
-socket.emit("join", { username, room_id });
+socket.emit("join", { username, room_id }, addManyCards);
 renderBoard();

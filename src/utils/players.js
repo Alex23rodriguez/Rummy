@@ -1,10 +1,11 @@
 const Deck = require("./deck");
 
+const NUM_STARTING_CARDS = 13;
+
 const players = {};
 const rooms = {};
 
 const addPlayer = (id, username, room_id) => {
-  players[id] = { username, cards: [], room_id };
   if (!rooms[room_id]) {
     rooms[room_id] = {
       deck: new Deck(),
@@ -15,6 +16,12 @@ const addPlayer = (id, username, room_id) => {
   } else {
     rooms[room_id].players.push(id);
   }
+  const intitialDeck = Array(NUM_STARTING_CARDS)
+    .fill()
+    .map(rooms[room_id].deck.takeCard);
+
+  players[id] = { username, cards: intitialDeck, room_id };
+  return intitialDeck;
 };
 
 const removePlayer = (id) => {
