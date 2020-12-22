@@ -10,6 +10,8 @@ const {
   getPlayersInfo,
   playerTakesCard,
   nextTurn,
+  updateBoardInRoom,
+  getBoardInRoom,
 } = require("./utils/players");
 
 const app = express();
@@ -23,6 +25,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 io.on("connection", (socket) => {
   socket.on("join", ({ username, room_id }) => {
     addPlayer(socket.id, username, room_id);
+    socket.emit("updateBoard", getBoardInRoom(room_id));
     console.log(`${username} joined room ${room_id}`);
 
     socket.join(room_id);
@@ -41,10 +44,14 @@ io.on("connection", (socket) => {
     io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
 
+  socket.on("updateBoard", ({ room_id, minBoard }) => {
+    updateBoardInRoom(room_id, minBoard);
+    socket.broadcast.to(room_id).emit("updateBoard", minBoard);
+  });
+
   socket.on("disconnect", () => {
     room_id = removePlayer(socket.id);
     if (!room_id) {
-      console.error("non registered player disconnected");
       return;
     }
     console.log("player left");

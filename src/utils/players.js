@@ -20,6 +20,7 @@ const addPlayer = (id, username, room_id) => {
 const removePlayer = (id) => {
   const p = players[id];
   if (!p) {
+    console.error("non existing player left");
     return;
   }
   const room = rooms[p.room_id];
@@ -40,7 +41,8 @@ const removePlayer = (id) => {
   // check if room is empty
   if (room.players.length === 0) {
     console.log(`room ${p.room_id} empty. removing room`);
-    delete rooms[id];
+    delete rooms[p.room_id];
+    return;
   }
   return p.room_id;
 };
@@ -73,10 +75,20 @@ function nextTurn(room_id) {
   return room;
 }
 
+function updateBoardInRoom(room_id, board) {
+  rooms[room_id].board = board;
+}
+
+function getBoardInRoom(room_id) {
+  return rooms[room_id].board;
+}
+
 module.exports = {
   addPlayer,
   removePlayer,
   getPlayersInfo,
   playerTakesCard,
   nextTurn,
+  updateBoardInRoom,
+  getBoardInRoom,
 };

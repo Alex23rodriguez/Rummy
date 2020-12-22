@@ -12,7 +12,7 @@
     <div class="main">
       <div class="top-zone" id="top-zone"></div>
       <div class="mid-zone">
-        <div id="board"></div>
+        <div class="board" id="board"></div>
       </div>
       <div class="bot-zone" id="bot-zone">
         <button id="take-btn">Take Card</button>
@@ -40,14 +40,28 @@
         style="color:{{color}}; {{#selected}}border-style:dashed{{/selected}}"
         onclick="changeSelectedCard({{index}})"
       >
-        {{num}}
+        <span> {{num}} </span>
       </div>
       {{/cards}}
+    </script>
+
+    <script id="placed-card-template" type="text/html">
+      {{#board}}
+      <div
+        class="placed-card"
+        style="{{#is_card}}border-color:{{color}}; color: {{color}}; border-width:3px;{{/is_card}} {{#selected}}border-style: dashed;{{/selected}}"
+        onclick="boardClick({{index}})"
+      >
+        {{num}}
+      </div>
+      {{/board}}
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/board.js"></script>
     <script type="text/javascript" src="/player.js"></script>
+    <script type="text/javascript" src="/keyboard.js"></script>
   </body>
 </html>

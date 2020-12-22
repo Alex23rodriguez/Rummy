@@ -1,80 +1,74 @@
 const socket = io();
 
-var myCards = [];
+const { username, room: room_id } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+
+const myCards = [];
 var selectedCard;
 var boardSelected = false;
 
 const $topZone = document.getElementById("top-zone");
+const $board = document.getElementById("board");
+const $botZone = document.getElementById("bot-zone");
 const $cardZone = document.getElementById("card-zone");
 const $nextTurn = document.getElementById("next-turn");
-const $botZone = document.getElementById("bot-zone");
 
-$botZone.addEventListener("click", (e) => deselect(e));
+const otherPlayerTemplate = document.getElementById("other-player-template")
+  .innerHTML;
+const cardTemplate = document.getElementById("card-template").innerHTML;
+const placedCardTemplate = document.getElementById("placed-card-template")
+  .innerHTML;
+
+$botZone.addEventListener("click", (e) => {
+  if (
+    selectedCard !== undefined &&
+    ["bot-zone", "card-zone"].includes(e.target.id)
+  ) {
+    deselectHand(e);
+  }
+});
 
 function swap(array, i, j) {
   [array[i], array[j]] = [array[j], array[i]];
   [array[i].index, array[j].index] = [i, j];
 }
 
-document.addEventListener("keydown", (e) => {
-  if (e.key.includes("Arrow")) {
-    const key = e.key.replace("Arrow", "");
-    if (boardSelected) {
-      // handle moving board
-    } else if (selectedCard !== undefined) {
-      // handle organizing cards
-      if (key == "Left" && selectedCard > 0) {
-        swap(myCards, selectedCard, selectedCard - 1);
-        selectedCard--;
-        renderCards();
-      } else if (key == "Right" && selectedCard < myCards.length - 1) {
-        swap(myCards, selectedCard, selectedCard + 1);
-        selectedCard++;
-        renderCards();
-      }
-    }
-  }
-});
-
-const otherPlayerTemplate = document.getElementById("other-player-template")
-  .innerHTML;
-const cardTemplate = document.getElementById("card-template").innerHTML;
-
 function updateCards(cards) {
   myCards = cards;
-  renderCards();
+  renderHand();
 }
 
 function addCard(card) {
   card.index = myCards.length;
   card.selected = false;
   myCards.push(card);
-  renderCards();
+  renderHand();
 }
 
-function renderCards() {
+function renderHand() {
   const html = Mustache.render(cardTemplate, { cards: myCards });
   $cardZone.innerHTML = html;
 }
 
 function changeSelectedCard(index) {
+  if (index === undefined) {
+    console.error("ALERT: index is undefined");
+  }
   if (selectedCard !== undefined) {
     myCards[selectedCard].selected = false;
   }
+  deselectBoard();
   selectedCard = index;
   myCards[selectedCard].selected = true;
-  renderCards();
+  renderHand();
 }
 
-function deselect(e) {
-  if (
-    selectedCard !== undefined &&
-    ["bot-zone", "card-zone"].includes(e.target.id)
-  ) {
-    myCards[selectedCard].selected = false;
-    selectedCard = undefined;
-    renderCards();
-  }
+function deselectHand(e) {
+  if (selectedCard === undefined) return;
+  if (selectedCard < myCards.length) myCards[selectedCard].selected = false;
+  selectedCard = undefined;
+  renderHand();
 }
 
 document.getElementById("take-btn").addEventListener("click", () => {
@@ -82,11 +76,8 @@ document.getElementById("take-btn").addEventListener("click", () => {
 });
 
 $nextTurn.addEventListener("click", () => {
+  deselectBoard();
   socket.emit("nextTurn", room_id);
-});
-
-const { username, room: room_id } = Qs.parse(location.search, {
-  ignoreQueryPrefix: true,
 });
 
 socket.on("updatePlayerInfo", (players) => {
@@ -107,4 +98,10 @@ socket.on("updatePlayerInfo", (players) => {
   $topZone.innerHTML = html;
 });
 
+socket.on("updateBoard", (minBoard) => {
+  setBoard(minBoard);
+  renderBoard();
+});
+
 socket.emit("join", { username, room_id });
+renderBoard();

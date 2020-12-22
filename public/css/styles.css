@@ -47,4 +47,24 @@
   width: 6vh;
   min-width: 4vh;
   text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  height: 100%;
+  grid-gap: 1px 1px;
+}
+
+.placed-card {
+  /* height: 100%; */
+  border-style: solid;
+  border-color: lightgray;
+  border-width: 1px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
 }
