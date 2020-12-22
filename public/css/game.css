@@ -21,7 +21,6 @@
 .bot-zone {
   /* flex-grow: 1; */
   height: 20vh;
-  min-height: -webkit-fill-available;
   background-color: aliceblue;
 }
 
