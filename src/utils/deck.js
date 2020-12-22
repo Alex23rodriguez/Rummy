@@ -1,4 +1,4 @@
-const NUM_DECKS = 1;
+const NUM_DECKS = 2;
 const NUM_JOKERS = 4;
 
 function Card(num, color) {

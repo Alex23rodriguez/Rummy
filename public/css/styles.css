@@ -54,7 +54,7 @@
 .board {
   display: grid;
   grid-template-columns: repeat(25, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+  grid-template-rows: repeat(10, 1fr);
   height: 100%;
   grid-gap: 1px 1px;
 }

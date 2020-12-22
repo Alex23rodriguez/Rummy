@@ -36,7 +36,7 @@ const removePlayer = (id) => {
   }
   // return cards to deck
   room.deck.addCards(p.cards);
-  room.deck.reshuffle();
+  //   room.deck.reshuffle();
 
   // check if room is empty
   if (room.players.length === 0) {
@@ -61,7 +61,7 @@ const getPlayersInfo = (room_id) => {
   return ans;
 };
 
-function playerTakesCard(id) {
+function playerTakesNewCard(id) {
   const player = players[id];
   const newCard = rooms[player.room_id].deck.takeCard();
   player.cards.push(newCard);
@@ -72,6 +72,10 @@ function playerPlacesCard(id, card) {
   players[id].cards = players[id].cards.filter(
     (c) => c.num !== card.num || c.color !== card.color
   );
+}
+
+function playerReturnsCard(id, card) {
+  players[id].cards.push(card);
 }
 
 function nextTurn(room_id) {
@@ -93,9 +97,10 @@ module.exports = {
   addPlayer,
   removePlayer,
   getPlayersInfo,
-  playerTakesCard,
+  playerTakesNewCard,
   nextTurn,
   updateBoardInRoom,
   getBoardInRoom,
   playerPlacesCard,
+  playerReturnsCard,
 };

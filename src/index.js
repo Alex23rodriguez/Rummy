@@ -8,10 +8,12 @@ const {
   addPlayer,
   removePlayer,
   getPlayersInfo,
-  playerTakesCard,
+  playerTakesNewCard,
   nextTurn,
   updateBoardInRoom,
   getBoardInRoom,
+  playerPlacesCard,
+  playerReturnsCard,
 } = require("./utils/players");
 
 const app = express();
@@ -34,7 +36,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("takeCard", ({ id, room_id }, callback) => {
-    const cards = playerTakesCard(id);
+    const cards = playerTakesNewCard(id);
     io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
     callback(cards);
   });
@@ -47,6 +49,16 @@ io.on("connection", (socket) => {
   socket.on("updateBoard", ({ room_id, minBoard }) => {
     updateBoardInRoom(room_id, minBoard);
     socket.broadcast.to(room_id).emit("updateBoard", minBoard);
+  });
+
+  socket.on("placeCard", ({ id, room_id, card }) => {
+    playerPlacesCard(id, card);
+    io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
+  });
+
+  socket.on("returnCard", ({ id, room_id, card }) => {
+    playerReturnsCard(id, card);
+    io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
 
   socket.on("disconnect", () => {

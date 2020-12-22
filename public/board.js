@@ -1,7 +1,7 @@
 const board = [];
 var selectedInBoard = [];
 
-const HEIGHT = 8;
+const HEIGHT = 10;
 const WIDTH = 25;
 
 for (var i = 0; i < HEIGHT * WIDTH; i++) {
@@ -58,6 +58,11 @@ function placeCard(index) {
   deselectHand();
 
   socket.emit("updateBoard", { minBoard: getMinBoard(), room_id });
+  socket.emit("placeCard", {
+    id: socket.id,
+    room_id,
+    card: { num: card.num, color: card.color },
+  });
 }
 
 function returnCardToHand(index) {
@@ -71,6 +76,11 @@ function returnCardToHand(index) {
   });
   renderHand();
   socket.emit("updateBoard", { minBoard: getMinBoard(), room_id });
+  socket.emit("returnCard", {
+    id: socket.id,
+    room_id,
+    card: { num: card.num, color: card.color },
+  });
 }
 
 function getMinBoard() {
