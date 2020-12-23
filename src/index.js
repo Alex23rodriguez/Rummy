@@ -21,6 +21,7 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 const port = process.env.PORT || 3000;
+const app_url = process.env.APP_URL;
 
 app.use(express.static(path.join(__dirname, "../public")));
 
@@ -47,6 +48,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("nextTurn", (room_id) => {
+    http.get(app_url); // get page so Heroku doesn't go to sleep
     nextTurn(room_id);
     io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
@@ -71,7 +73,7 @@ io.on("connection", (socket) => {
     if (!room_id) {
       return;
     }
-    console.log("player left");
+    console.log(`player left from room ${room_id}`);
     io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
 });
