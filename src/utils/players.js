@@ -79,8 +79,11 @@ function playerTakesNewCard(id) {
 }
 
 function playerPlacesCard(id, card) {
-  players[id].cards = players[id].cards.filter(
-    (c) => c.num !== card.num || c.color !== card.color
+  players[id].cards.splice(
+    players[id].cards.findIndex(
+      (c) => c.num !== card.num || c.color !== card.color
+    ),
+    1
   );
 }
 
@@ -96,7 +99,11 @@ function nextTurn(room_id) {
 }
 
 function updateBoardInRoom(room_id, board) {
-  rooms[room_id].board = board;
+  try {
+    rooms[room_id].board = board;
+  } catch {
+    console.error("ROOM NON EXISTENT! ", room_id);
+  }
 }
 
 function getBoardInRoom(room_id) {

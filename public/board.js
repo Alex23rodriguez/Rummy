@@ -105,7 +105,7 @@ function getMinBoard() {
 }
 
 function setBoard(minBoard) {
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < WIDTH * HEIGHT; i++) {
     if (minBoard[i]) {
       board[i] = {
         is_card: true,
