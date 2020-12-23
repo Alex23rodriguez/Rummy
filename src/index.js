@@ -47,6 +47,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("nextTurn", (room_id) => {
+    http.get("/"); // get page so Heroku doesn't go to sleep
     nextTurn(room_id);
     io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
@@ -71,7 +72,7 @@ io.on("connection", (socket) => {
     if (!room_id) {
       return;
     }
-    console.log("player left");
+    console.log(`player left from room ${room_id}`);
     io.to(room_id).emit("updatePlayerInfo", getPlayersInfo(room_id));
   });
 });
