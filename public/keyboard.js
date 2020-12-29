@@ -5,15 +5,7 @@ window.addEventListener("keydown", (e) => {
     const key = e.key.replace("Arrow", "");
     if (selectedCard !== undefined) {
       // handle organizing cards
-      if (key == "Left" && selectedCard > 0) {
-        swap(myCards, selectedCard, selectedCard - 1);
-        selectedCard--;
-        renderHand();
-      } else if (key == "Right" && selectedCard < myCards.length - 1) {
-        swap(myCards, selectedCard, selectedCard + 1);
-        selectedCard++;
-        renderHand();
-      }
+      moveHand(key);
     } else {
       // handle moving board
       moveBoard(key);
@@ -22,6 +14,17 @@ window.addEventListener("keydown", (e) => {
     _isShiftDown = true;
   }
 });
+
+function moveHand(key) {
+  if (key == "Left" && selectedCard > 0) {
+    swap(myCards, selectedCard, selectedCard - 1);
+    selectedCard--;
+  } else if (key == "Right" && selectedCard < myCards.length - 1) {
+    swap(myCards, selectedCard, selectedCard + 1);
+    selectedCard++;
+  }
+  renderHand();
+}
 
 window.addEventListener("keyup", (e) => {
   if (e.key == "Shift") {
