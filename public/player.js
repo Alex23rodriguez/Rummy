@@ -8,13 +8,15 @@ const myCards = [];
 var selectedCard;
 var isMyTurn = false;
 var _hasMoved = false;
+var _hasPlaced = false;
+var _numStartingCards;
 
 const $topZone = document.getElementById("top-zone");
 const $board = document.getElementById("board");
 const $botZone = document.getElementById("bot-zone");
 const $cardZone = document.getElementById("card-zone");
-const $nextTurn = document.getElementById("next-turn");
-const $takeBtn = document.getElementById("take-btn");
+// const $nextTurn = document.getElementById("next-turn");
+const $takeAndFinishButton = document.getElementById("take-btn");
 
 const otherPlayerTemplate = document.getElementById("other-player-template")
   .innerHTML;
@@ -81,29 +83,29 @@ function deselectHand() {
   renderHand();
 }
 
-$takeBtn.addEventListener("click", () => {
-  socket.emit("takeCard", { id: socket.id, room_id }, addCard);
-});
-
-$nextTurn.addEventListener("click", () => {
+$takeAndFinishButton.addEventListener("click", () => {
+  if ($takeAndFinishButton.innerText.includes("Take")) {
+    socket.emit("takeCard", { id: socket.id, room_id }, addCard);
+  }
   deselectBoard();
   socket.emit("nextTurn", room_id);
 });
 
 socket.on("updatePlayerInfo", (players) => {
-  //   console.log(players);
-
   const index = players.findIndex((p) => p.username === username);
 
   // enable / disable nextTurn button
   if (players[index].turn) {
+    if (!isMyTurn) {
+      alert("Your turn!");
+      _numStartingCards = myCards.length;
+      updateButtonText();
+    }
     isMyTurn = true;
-    $nextTurn.removeAttribute("disabled");
-    $takeBtn.removeAttribute("disabled");
+    $takeAndFinishButton.removeAttribute("disabled");
   } else {
     isMyTurn = false;
-    $nextTurn.setAttribute("disabled", "disabled");
-    $takeBtn.setAttribute("disabled", "disabled");
+    $takeAndFinishButton.setAttribute("disabled", "disabled");
   }
 
   //   players = players.slice(index + 1).concat(players.slice(0, index));

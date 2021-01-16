@@ -74,6 +74,15 @@ function placeCard(index) {
     room_id,
     card: { num: card.num, color: card.color },
   });
+  updateButtonText();
+}
+
+function updateButtonText() {
+  if (myCards.length === _numStartingCards) {
+    $takeAndFinishButton.innerText = "Take card and finish turn";
+  } else {
+    $takeAndFinishButton.innerText = "Finish turn";
+  }
 }
 
 function returnCardToHand(index) {
@@ -92,6 +101,7 @@ function returnCardToHand(index) {
     room_id,
     card: { num: card.num, color: card.color },
   });
+  updateButtonText();
 }
 
 function getMinBoard() {
